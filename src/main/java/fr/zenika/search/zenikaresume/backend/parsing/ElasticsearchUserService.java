@@ -33,7 +33,7 @@ public class ElasticsearchUserService {
 
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPut postRequest = new HttpPut(
-                    "http://localhost:9200/formation-elastic-alias/doc/"+parsedUser.getIdFunct());
+                    System.getenv("elasticsearch.url")+"/formation-elastic-alias/doc/"+parsedUser.getIdFunct());
 
             Gson gson = new Gson();
 

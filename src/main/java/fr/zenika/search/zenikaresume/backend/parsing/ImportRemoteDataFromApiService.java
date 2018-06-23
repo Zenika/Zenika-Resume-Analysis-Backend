@@ -20,7 +20,7 @@ public class ImportRemoteDataFromApiService {
 
     public List<ParsedUser> fetchDatas()  {
 
-        final String uri = "http://localhost:3000/resumes/complete";
+        final String uri = System.getenv("zenika.writing.resume.url")+"/resumes/complete";
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<List<ResumeApiResponse>> rateResponse =

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:4200"},allowCredentials = "true")
+
+//FIXME https://spring.io/blog/2015/06/08/cors-support-in-spring-framework#filter-based-cors-support
+
+@CrossOrigin(origins = {"http://localhost:4200","https://zenika-resume-analysis.herokuapp.com"},allowCredentials = "true")
 @Controller
 public class MainController {
 
@@ -30,7 +33,6 @@ public class MainController {
     @RequestMapping("/user")
     @ResponseBody
     public Principal user(Principal principal) {
-        String gg= "";
         return principal;
     }
 

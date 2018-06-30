@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 
 
@@ -36,7 +37,7 @@ public class MainController {
 
     @PostMapping(value = "/search",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String search(@RequestBody String requestDataBody) {
+    public String search(@RequestBody String requestDataBody) throws IOException {
         return elasticsearchUserService.search(requestDataBody);
     }
 

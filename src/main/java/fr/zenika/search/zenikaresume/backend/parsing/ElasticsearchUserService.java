@@ -3,9 +3,11 @@ package fr.zenika.search.zenikaresume.backend.parsing;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.Validate;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -78,25 +80,42 @@ public class ElasticsearchUserService {
         });
     }
 
-    public String search(String requestDataBody)  {
+    public String search(String requestDataBody) throws IOException {
 
         logger.debug("Search elastic from req {}",requestDataBody);
+//
+//        final String uri =
+//                System.getenv("elasticsearch.url")+"/formation-elastic-alias/doc/_search";
+//
+//        RestTemplate rt = new RestTemplate();
+//        rt.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+//        rt.getMessageConverters().add(new StringHttpMessageConverter());
+//
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        HttpEntity<String> request = new HttpEntity<>(requestDataBody, headers);
+//        ResponseEntity<String> response = rt.postForEntity( uri, request , String.class );
+//
+//        logger.debug("response of search {} ",response);
+//
+//        return response.getBody();
+//
 
-        final String uri =
-                System.getenv("elasticsearch.url")+"/formation-elastic-alias/doc/_search";
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost postRequest = new HttpPost(
+                System.getenv("elasticsearch.url")+"/formation-elastic-alias/doc/_search");
+//        Gson gson = new Gson();
 
-        RestTemplate rt = new RestTemplate();
-        rt.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        rt.getMessageConverters().add(new StringHttpMessageConverter());
+//        String jsonInString = gson.toJson(requestDataBody);
 
-        HttpHeaders headers = new HttpHeaders();
+        StringEntity input = new StringEntity(requestDataBody,"UTF-8");
+        input.setContentType("application/json");
+        postRequest.setEntity(input);
 
-        HttpEntity<String> request = new HttpEntity<>(requestDataBody, headers);
-        ResponseEntity<String> response = rt.postForEntity( uri, request , String.class );
+        HttpResponse response = httpClient.execute(postRequest);
 
-        logger.debug("response of search {} ",response);
+        return EntityUtils.toString(response.getEntity(), "UTF-8");
 
-        return response.getBody();
 
     }
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -76,10 +77,14 @@ public class ImportRemoteDataFromApiService {
                 parsedUser1.setIdFunct(resumeApiResponse.getUuid());
                 return parsedUser1;
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("problem to parse user {} error {}",resumeApiResponse,e);
             }
             return null;
         }).collect(Collectors.toList());
+
+        parsedUsers.removeIf(Objects::isNull);
+
+
         logger.debug("utilisateurs traités {}",parsedUsers);
         logger.debug("nombre d'utilisateurs recupérés aprés traitement : {}",parsedUsers.size());
 

@@ -6,7 +6,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,12 +22,11 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.List;
 
-/**
- * Created by jurio on 04/12/17.
- */
 
 @Service
 public class ElasticsearchUserService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public void indexUsers(List<ParsedUser> users) {
@@ -27,7 +34,6 @@ public class ElasticsearchUserService {
         Validate.notNull(users);
 
         users.forEach(parsedUser -> {
-
 
         try {
 
@@ -55,9 +61,9 @@ public class ElasticsearchUserService {
                     new InputStreamReader((response.getEntity().getContent())));
 
             String output;
-            System.out.println("Output from Server .... \n");
+            logger.debug("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                logger.debug(output);
             }
 
             httpClient.getConnectionManager().shutdown();
@@ -71,4 +77,27 @@ public class ElasticsearchUserService {
         }
         });
     }
+
+    public String search(String requestDataBody)  {
+
+        logger.debug("Search elastic from req {}",requestDataBody);
+
+        final String uri =
+                System.getenv("elasticsearch.url")+"/formation-elastic-alias/doc/_search";
+
+        RestTemplate rt = new RestTemplate();
+        rt.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        rt.getMessageConverters().add(new StringHttpMessageConverter());
+
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<String> request = new HttpEntity<>(requestDataBody, headers);
+        ResponseEntity<String> response = rt.postForEntity( uri, request , String.class );
+
+        logger.debug("response of search {} ",response);
+
+        return response.getBody();
+
+    }
+
 }

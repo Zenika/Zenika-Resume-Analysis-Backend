@@ -4,6 +4,8 @@ package fr.zenika.search.zenikaresume.backend.parsing;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
  import org.joda.time.format.DateTimeFormat;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
  import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -23,7 +25,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ParsingService {
-     public static final List<String> TODAY_KEYWORD_DATE = Arrays.asList("a ce jour","maintenant","aujourd'hui", "now", "courant", "en cours");
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public static final List<String> TODAY_KEYWORD_DATE = Arrays.asList("a ce jour","maintenant","aujourd'hui", "now", "courant", "en cours");
     // http://www.ocpsoft.org/tutorials/regular-expressions/java-visual-regex-tester/
 
     public static final String F = "yyyy-MM-dd'T'HH:mm:ss.SSS";
@@ -33,14 +38,13 @@ public class ParsingService {
     public ParsedUser parseFromContent(String fileContent) throws IOException {
 
         ParsedUser parsedUser = new ParsedUser();
-        //fileContent = StringUtils.stripAccents(fileContent);
 
         List<String> lines = IOUtils.readLines(new StringReader(fileContent));
 
         int currentPos = 0;
         Pattern p = Pattern.compile("([\\wàâçéèêëîïôûùü]+-?[\\wàâçéèêëîïôûùü]+) ([\\wàâçéèêëîïôûùü]+) (\\d+) an(s)? d'expérience");
         Matcher m = p.matcher(lines.get(currentPos));
-        System.out.println(lines.get(0));
+        logger.debug(lines.get(0));
         if(m.find()){
             parsedUser.setFirstname(m.group(1));
             parsedUser.setLastname(m.group(2));

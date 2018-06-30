@@ -2,8 +2,9 @@ package fr.zenika.search.zenikaresume.backend.parsing;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class ImportRemoteDataFromApiService {
 
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ParsingService parsingService;
@@ -50,8 +53,8 @@ public class ImportRemoteDataFromApiService {
         List<ResumeApiResponse> resumeApiResponses = rateResponse.getBody().stream()
                 .filter(resumeApiResponse -> StringUtils.isNotEmpty(resumeApiResponse.getPath())).collect(Collectors.toList());
 
-        System.out.println(resumeApiResponses);
-        System.out.println("nombre d'utilisateurs recupérés avant traitement : "+resumeApiResponses.size());
+        logger.debug("val resp : {}",resumeApiResponses);
+        logger.debug("nombre d'utilisateurs recupérés avant traitement : {} ",resumeApiResponses.size());
 
         List<ParsedUser> parsedUsers = resumeApiResponses.stream()
                 .map(resumeApiResponse -> {
@@ -77,8 +80,8 @@ public class ImportRemoteDataFromApiService {
             }
             return null;
         }).collect(Collectors.toList());
-        System.out.println("utilisateurs traités "+parsedUsers);
-        System.out.println("nombre d'utilisateurs recupérés aprés traitement : "+parsedUsers.size());
+        logger.debug("utilisateurs traités {}",parsedUsers);
+        logger.debug("nombre d'utilisateurs recupérés aprés traitement : {}",parsedUsers.size());
 
         return parsedUsers;
 

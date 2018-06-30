@@ -37,6 +37,7 @@ public class ElasticsearchUserService {
 
         users.forEach(parsedUser -> {
 
+            logger.debug("user to index : {}",parsedUser);
         try {
 
             DefaultHttpClient httpClient = new DefaultHttpClient();

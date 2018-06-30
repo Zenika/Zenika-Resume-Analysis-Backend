@@ -62,7 +62,6 @@ public class ResumeApiResponse {
     @Override
     public String toString() {
         return "ResumeApiResponse{" +
-                "content='" + content + '\'' +
                 ", metadata=" + metadata +
                 ", last_modified=" + last_modified +
                 ", path='" + path + '\'' +

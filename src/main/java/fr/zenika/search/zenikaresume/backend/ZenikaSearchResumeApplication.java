@@ -1,5 +1,7 @@
 package fr.zenika.search.zenikaresume.backend;
 
+import fr.zenika.search.zenikaresume.backend.job.ImportUsersJob;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,9 +33,9 @@ import javax.servlet.Filter;
 @EnableOAuth2Client
 public class ZenikaSearchResumeApplication extends WebSecurityConfigurerAdapter {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ZenikaSearchResumeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ZenikaSearchResumeApplication.class, args);
+    }
 
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
@@ -98,11 +100,13 @@ public class ZenikaSearchResumeApplication extends WebSecurityConfigurerAdapter 
     @Bean
     public AuthoritiesExtractor authoritiesExtractor(OAuth2RestOperations template) {
         return map -> {
-            if(!map.containsKey("hd") || !map.get("hd").equals("zenika.com")){
+            if (!map.containsKey("hd") || !map.get("hd").equals("zenika.com")) {
                 throw new BadCredentialsException("Not in zenika origanization");
             }
             return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
         };
     }
+
+
 
 }

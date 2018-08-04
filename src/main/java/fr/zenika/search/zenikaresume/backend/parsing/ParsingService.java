@@ -68,7 +68,9 @@ public class ParsingService {
 
         currentPos++;
 
-        parsedUser.setEmail(lines.get(currentPos));
+        if(!lines.get(currentPos).isEmpty() && lines.get(currentPos).contains("@")){
+            parsedUser.setEmail(lines.get(currentPos));
+        }
 
         currentPos++;
         currentPos++;

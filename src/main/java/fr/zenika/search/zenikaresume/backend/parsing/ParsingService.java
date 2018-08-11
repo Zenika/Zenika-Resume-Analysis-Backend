@@ -1,20 +1,18 @@
 package fr.zenika.search.zenikaresume.backend.parsing;
 
- import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
- import org.joda.time.format.DateTimeFormat;
- import org.slf4j.Logger;
- import org.slf4j.LoggerFactory;
- import org.springframework.stereotype.Service;
+import org.joda.time.format.DateTimeFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -78,10 +76,7 @@ public class ParsingService {
 
         while(!lines.get(currentPos).contains("--expertise-end")){
             if(!lines.get(currentPos).contains("--expertise") && !lines.get(currentPos).isEmpty()){
-                parsedUser.getGlobalSkills().addAll(
-                        Arrays.asList(lines.get(currentPos).split("[-+*/,-]")).stream()
-                                .map(v -> v.trim()).collect(Collectors.toList())
-                );
+                parsedUser.getGlobalSkills().addAll(parseSkillsStyle(lines.get(currentPos)));
             }
             currentPos++;
         }
@@ -174,6 +169,51 @@ public class ParsingService {
         return parsedUser;
 
     }
+
+    public static List<String> parseSkillsStyle(String rawSkills){
+
+        List<String> skillFinal = new ArrayList<>();
+
+
+        StringBuilder currentWord = new StringBuilder();
+
+        boolean isCurrentGroup = false;
+        StringBuilder currentGroupName = new StringBuilder();
+
+        for(int i = 0;i<rawSkills.length();i++){
+            if(rawSkills.charAt(i) == '('){
+                isCurrentGroup = true;
+                currentGroupName = new StringBuilder(currentWord);
+                currentWord = new StringBuilder();
+            }else if(rawSkills.charAt(i) == ')'){
+                isCurrentGroup = false;
+                skillFinal.add(currentGroupName.toString()+currentWord.toString());
+                currentWord = new StringBuilder();
+            }else if(rawSkills.charAt(i) == ',') {
+                if(isCurrentGroup) {
+                    skillFinal.add(currentGroupName.toString()+currentWord.toString());
+                }else{
+                    if(!currentWord.toString().isEmpty()){
+                        skillFinal.add(currentWord.toString());
+                    }
+                }
+                currentWord = new StringBuilder();
+            }else if(rawSkills.charAt(i) == ' ') {
+                if(currentWord.length()>0){
+                    currentWord.append(rawSkills.charAt(i));
+                }
+            }else{
+                currentWord.append(rawSkills.charAt(i));
+            }
+        }
+        if(!currentWord.toString().isEmpty()){
+            skillFinal.add(currentWord.toString());
+
+        }
+        return skillFinal;
+    }
+
+
 
     private RangeDate createRangeDateFromMission(String fullDate) {
 

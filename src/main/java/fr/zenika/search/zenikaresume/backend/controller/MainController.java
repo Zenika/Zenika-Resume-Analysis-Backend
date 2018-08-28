@@ -26,8 +26,10 @@ public class MainController {
 
     @RequestMapping("/user")
     @ResponseBody
-    public Principal user(Principal principal) {
-        return principal;
+    public LoggedUser user(Principal principal) {
+        LoggedUser loggedUser = new LoggedUser();
+        loggedUser.setCvId("TO_COMPLETE");
+        return loggedUser;
     }
 
     @RequestMapping("/index-users")

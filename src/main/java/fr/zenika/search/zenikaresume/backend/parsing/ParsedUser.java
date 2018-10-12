@@ -21,6 +21,15 @@ public class ParsedUser {
     private String identifierHostedSite;
     private List<String> hobbies = new ArrayList<>();
     private String idFunct;
+    private String path;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
 
     public String getLastUpdate() {

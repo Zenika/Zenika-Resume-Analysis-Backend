@@ -75,6 +75,7 @@ public class ImportRemoteDataFromApiService {
                 parsedUser1.setFullContent(stringBuilder.toString());
                 parsedUser1.setLastUpdate(resumeApiResponse.getLast_modified().toString());
                 parsedUser1.setIdFunct(resumeApiResponse.getUuid());
+                parsedUser1.setPath(resumeApiResponse.getPath());
                 return parsedUser1;
             } catch (Exception e) {
                 logger.error("problem to parse user {} error {}",resumeApiResponse,e);

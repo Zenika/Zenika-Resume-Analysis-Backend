@@ -1,0 +1,5 @@
+{
+  "actions" : [
+    { "add" : { "index" : "formation-user", "alias" : "formation-elastic-alias" } }
+  ]
+}

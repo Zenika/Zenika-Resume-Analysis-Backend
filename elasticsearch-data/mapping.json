@@ -1,0 +1,166 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "fold_lower_analyser": {
+          "tokenizer": "standard",
+          "filter":  [ "lowercase", "asciifolding" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "email": {
+          "type": "text",
+          "copy_to": "all_custom",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "lastUpdate": {
+          "copy_to": "all_custom",
+          "type": "date"
+        },
+        "firstname": {
+          "type": "text",
+          "copy_to": "all_custom",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "fullContent": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "fullname": {
+          "type": "text",
+          "copy_to": "all_custom",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "globalSkills": {
+          "copy_to": "all_custom",
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "folded_lowercase":{
+              "type":       "text",
+              "analyzer":   "fold_lower_analyser"
+            }
+          }
+        },
+        "hobbies": {
+          "type": "text",
+          "copy_to": "all_custom",
+          "fields": {
+            "completion": {
+              "type": "completion",
+              "analyzer": "simple",
+              "preserve_separators": true,
+              "preserve_position_increments": true,
+              "max_input_length": 50
+            },
+            "keyword": {
+              "type": "keyword"
+            },
+            "folded_lowercase":{
+              "type":       "text",
+              "analyzer":   "fold_lower_analyser"
+            }
+          }
+        },
+        "lastname": {
+          "type": "text",
+          "copy_to": "all_custom",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "missions": {
+          "type" : "nested",
+          "properties": {
+            "startDate": {
+              "copy_to": "all_custom",
+              "type": "date"
+            },
+            "endDate": {
+              "copy_to": "all_custom",
+              "type": "date"
+            },
+            "description": {
+              "copy_to": "all_custom",
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "location": {
+              "copy_to": "all_custom",
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "role": {
+              "copy_to": "all_custom",
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "nbAnneeExp": {
+          "copy_to": "all_custom",
+          "type": "long"
+        },
+        "roles": {
+          "copy_to": "all_custom",
+          "type": "text",
+          "fielddata": true,
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "all_custom":{
+          "type": "text"
+        }
+      }
+    }
+  }
+}

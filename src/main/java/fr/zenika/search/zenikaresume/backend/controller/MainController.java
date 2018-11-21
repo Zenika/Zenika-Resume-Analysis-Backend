@@ -13,7 +13,7 @@ import java.security.Principal;
 
 //FIXME https://spring.io/blog/2015/06/08/cors-support-in-spring-framework#filter-based-cors-support
 
-@CrossOrigin(origins = {"http://localhost:4200","https://zenika-resume-analysis.herokuapp.com"},allowCredentials = "true",methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.POST})
+@CrossOrigin(origins = {"http://localhost:4200","https://zenika-resume-analysis.herokuapp.com","https://analysis.resume.zenika.com"},allowCredentials = "true",methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.POST})
 @Controller
 public class MainController {
 

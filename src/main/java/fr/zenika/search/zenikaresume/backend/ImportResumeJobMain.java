@@ -16,10 +16,10 @@ public class ImportResumeJobMain {
     }
 
     @Autowired
-	private ImportRemoteDataFromApiService importRemoteDataFromApiService;
+    private ImportRemoteDataFromApiService importRemoteDataFromApiService;
 
-	@Autowired
-	private ElasticsearchUserService elasticsearchUserService;
+    @Autowired
+    private ElasticsearchUserService elasticsearchUserService;
 
     @PostConstruct
     private void runImportJob(){

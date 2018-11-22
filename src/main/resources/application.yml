@@ -14,4 +14,3 @@ logging:
   level:
     org.springframework.security: DEBUG
     fr.zenika: DEBUG
-    
